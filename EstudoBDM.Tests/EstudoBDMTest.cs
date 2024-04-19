@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using EstudoBDM.Configs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
 
 namespace EstudoBDM.Tests
 {
@@ -16,16 +17,16 @@ namespace EstudoBDM.Tests
 
         public EstudoBDMTest()
         {
+            var builder = WebApplication.CreateBuilder();
+
             var services = new ServiceCollection();
 
             services.AddDbContext<DatabaseConnection>(options =>
             {
-                string connectionString = $"Server={Environment.GetEnvironmentVariable("Server")};" +
-                                          $"Database={Environment.GetEnvironmentVariable("Database")};" +
-                                          $"User={Environment.GetEnvironmentVariable("User")};" +
-                                          $"Password={Environment.GetEnvironmentVariable("Password")};";
-
-                connectionString = "Server=localhost;Database=estudobdm;User=romario;Password=123456";
+                string connectionString = $"Server={builder.Configuration["Server"]};" +
+                              $"Database={builder.Configuration["Database"]};" +
+                              $"User={builder.Configuration["User"]};" +
+                              $"Password={builder.Configuration["Password"]};";
 
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             });
@@ -40,10 +41,10 @@ namespace EstudoBDM.Tests
         }
 
         [Fact]
-        public void POST_Employee_ReturnsCREATEDNewEmployee()
+        public async void POST_Employee_ReturnsCREATEDNewEmployee()
         {
             // Arrange
-            EmployeeDTOs.AddEmployeeDTO newEmployee = new EmployeeDTOs.AddEmployeeDTO
+            EmployeeDTOs.AddEmployeeDTO newEmployee = new()
             {
                 name = "Test",
                 age = 30,
@@ -51,7 +52,7 @@ namespace EstudoBDM.Tests
             };
 
             // Act
-            var result = EmployeeController.Add(newEmployee);
+            var result = await EmployeeController.Add(newEmployee);
             var createdResult = result as CreatedResult;
 
             // Assert

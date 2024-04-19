@@ -11,13 +11,9 @@ namespace EstudoBDM.Infraestructure
         UserDTOs.LoggedUserDTO GenerateJWT(UserDTOs.LoginUserDTO loginUser);
     }
 
-    public class JwtService : IJwtService
+    public class JwtService(IConfiguration configuration) : IJwtService
     {
-        private IConfiguration _configuration;
-        public JwtService(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        private readonly IConfiguration _configuration = configuration;
 
         public UserDTOs.LoggedUserDTO GenerateJWT(UserDTOs.LoginUserDTO loginUser)
         {
@@ -28,7 +24,7 @@ namespace EstudoBDM.Infraestructure
                 new Claim("scopes", string.Join(", ", loginUser.scopes!))
             };
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
 
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
