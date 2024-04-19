@@ -1,0 +1,6 @@
+@EstudoBDM_HostAddress = http://localhost:5188
+
+GET {{EstudoBDM_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
