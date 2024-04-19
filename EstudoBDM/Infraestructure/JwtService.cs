@@ -35,7 +35,7 @@ namespace EstudoBDM.Infraestructure
             return new UserDTOs.LoggedUserDTO
             {
                 authenticated = true,
-                token = new JwtSecurityTokenHandler().WriteToken(token), // Converte o token em uma representação JWS ou JWE (string) comp
+                token = new JwtSecurityTokenHandler().WriteToken(token), // Converts the JWT into a web compatible representation: JWS or JWE (strings)
                 expiration = expiration
             };
         }
