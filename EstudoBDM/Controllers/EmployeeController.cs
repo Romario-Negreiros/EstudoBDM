@@ -45,7 +45,7 @@ namespace EstudoBDM.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(new { message = ex.Message })
+                return new JsonResult(new ApiResponsesDTOs.ExceptionDTO(ex.Message))
                 {
                     StatusCode = StatusCodes.Status500InternalServerError
                 };
@@ -65,7 +65,7 @@ namespace EstudoBDM.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(new { message = ex.Message })
+                return new JsonResult(new ApiResponsesDTOs.ExceptionDTO(ex.Message))
                 {
                     StatusCode = StatusCodes.Status500InternalServerError
                 };
