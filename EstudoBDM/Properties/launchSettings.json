@@ -16,7 +16,11 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5188",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "User": "romario",
+        "Password": "123456",
+        "Database": "estudobdm",
+        "Server": "localhost"
       }
     },
     "https": {

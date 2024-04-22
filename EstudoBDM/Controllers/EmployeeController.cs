@@ -83,7 +83,7 @@ namespace EstudoBDM.Controllers
 
                 if (employee == null)
                 {
-                    return NotFound(new { message = "Employee not found!" } );
+                    return NotFound(new ApiResponsesDTOs.ExceptionDTO("Employee not found!"));
                 }
 
                 return Ok(employee);
