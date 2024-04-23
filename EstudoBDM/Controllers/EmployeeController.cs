@@ -7,22 +7,16 @@ using Microsoft.AspNetCore.Authorization;
 namespace EstudoBDM.Controllers
 {
     [ApiController]
-    [Route("api/v1/employee")]
-    public class EmployeeController : ControllerBase
+    [Route("/api/v1/employee")]
+    public class EmployeeController(IUnitOfWork unitOfWork) : ControllerBase
     {
-        private readonly IUnitOfWork _uof;
-        private readonly IEmployeeRepository _employeeRepository;
-
-        public EmployeeController(IUnitOfWork unitOfWork)
-        {
-            _uof = unitOfWork;
-            _employeeRepository = unitOfWork.EmployeeRepository;
-        }
+        private readonly IUnitOfWork _uof = unitOfWork;
+        private readonly IEmployeeRepository _employeeRepository = unitOfWork.EmployeeRepository;
 
         [HttpPost]
         [Authorize]
         [ScopeRequirement(claimValue: "write")]
-        public async Task<IActionResult> Add(EmployeeDTOs.AddEmployeeDTO addEmployee)
+        public async Task<IActionResult> Add([FromBody] EmployeeDTOs.AddEmployeeDTO addEmployee)
         {
             try
             {
@@ -72,10 +66,18 @@ namespace EstudoBDM.Controllers
             }
         }
 
+        [HttpGet("externo")]
+        [Authorize]
+        public async Task<IActionResult> ExternalGetAll()
+        {
+            return await GetAll();
+        }
+
+
         [HttpGet("{id}")]
         [Authorize]
         [ScopeRequirement(claimValue: "read")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
             {
@@ -90,7 +92,7 @@ namespace EstudoBDM.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(new { message = ex.Message })
+                return new JsonResult(new ApiResponsesDTOs.ExceptionDTO(ex.Message))
                 {
                     StatusCode = StatusCodes.Status500InternalServerError
                 };

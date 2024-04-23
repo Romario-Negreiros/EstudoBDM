@@ -8,5 +8,10 @@ namespace EstudoBDM.DTOs
         {
             public string message { get; set; } = _message;
         }
+
+        public class NullFieldExceptionDTO(string field)
+        {
+            public string message { get; set; } = Properties.Resources.NullFieldException.Replace("{}", field);
+        }
     }
 }

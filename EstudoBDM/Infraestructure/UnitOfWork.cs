@@ -13,7 +13,7 @@ namespace EstudoBDM.Infraestructure
         void Rollback();
         void Dispose();
     }
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(DatabaseConnection _dbCon) : IUnitOfWork
     {
         private readonly EmployeeRepository? _employeeRepository;
 
@@ -25,21 +25,16 @@ namespace EstudoBDM.Infraestructure
             }
         }
 
-        public DatabaseConnection dbCon;
+        public DatabaseConnection dbCon = _dbCon;
 
-        public UnitOfWork(DatabaseConnection _dbCon)
+        public async void Commit()
         {
-            dbCon = _dbCon;
-        }
-
-        public void Commit()
-        {
-            dbCon.SaveChanges();
+            await dbCon.SaveChangesAsync();
         }
 
         public void Rollback()
         {
-            List<EntityState> statesToRollback = new() { EntityState.Added, EntityState.Modified, EntityState.Deleted };
+            EntityState[] statesToRollback = [EntityState.Added, EntityState.Modified, EntityState.Deleted];
 
             foreach (var entry in dbCon.ChangeTracker.Entries())
             {
@@ -49,9 +44,9 @@ namespace EstudoBDM.Infraestructure
                 }
             }
         }
-        public void Dispose()
+        public async void Dispose()
         {
-            dbCon.Dispose();
+            await dbCon.DisposeAsync();
         }
     }
 }

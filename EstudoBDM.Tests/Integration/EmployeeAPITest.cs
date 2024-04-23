@@ -1,9 +1,9 @@
-using EstudoBDM.Controllers;
 using EstudoBDM.Models;
 using EstudoBDM.DTOs;
 using EstudoBDM.Tests.Fixtures;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using EstudoBDM.Controllers;
 
 namespace EstudoBDM.Tests.Integration
 {
